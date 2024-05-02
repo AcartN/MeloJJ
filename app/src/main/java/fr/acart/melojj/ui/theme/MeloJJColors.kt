@@ -3,18 +3,22 @@ package fr.acart.melojj.ui.theme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+val LocalMeloJJColors = staticCompositionLocalOf<MeloJJColors> {
+    error("No MeloJJColors provided")
+}
 
 @Immutable
 data class MeloJJColors(
@@ -82,41 +86,40 @@ data class MeloJJContentColors(
     }
 }
 
+@Preview
 @Composable
-private fun MeloJJColorItem(
-    name: String,
-    color: Color,
+private fun MeloJJColorsPreview(
+    @PreviewParameter(ColorPreviewParameterProvider::class) namedColor: Pair<String, Color>,
 ) {
     Column {
-        Text(text = name, fontSize = 16.sp, color = Color.White)
-        Text(text = color.value.toHexString(), fontSize = 12.sp, color = Color.Gray)
-        Box(modifier = Modifier.size(48.dp).background(color))
+        Text(
+            text = namedColor.first,
+            fontSize = 14.sp,
+            color = Color.White,
+        )
+        Text(
+            text = namedColor.second.value.toHexString(),
+            fontSize = 12.sp,
+            color = Color.Gray,
+        )
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .background(namedColor.second),
+        )
     }
 }
 
 private fun ULong.toHexString() = toString(16).dropLast(8)
 
-@Preview
-@Composable
-private fun MeloJJColorsPreview() {
-    val meloJJColors = MeloJJColors()
-    val allColors = listOf(
-        "Background" to meloJJColors.background.entries,
-        "Content" to meloJJColors.content.entries,
-    )
-    LazyColumn {
-        for ((name, colors) in allColors) {
-            item {
-                Text(
-                    text = name,
-                    fontSize = 24.sp,
-                    color = Color.White,
-                    modifier = Modifier.padding(16.dp),
-                )
-            }
-            items(colors.toList()) { (name, color) ->
-                MeloJJColorItem(name, color)
-            }
-        }
-    }
+private class ColorPreviewParameterProvider : PreviewParameterProvider<Pair<String, Color>> {
+    override val values = run {
+        val meloJJColors = MeloJJColors()
+        meloJJColors.background.entries.map { (name, color) ->
+            ("Background $name" to color)
+        } +
+                meloJJColors.content.entries.map { (name, color) ->
+                    ("Content $name" to color)
+                }
+    }.asSequence()
 }
