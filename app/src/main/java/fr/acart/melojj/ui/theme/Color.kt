@@ -1,11 +1,14 @@
 package fr.acart.melojj.ui.theme
 
-import androidx.compose.ui.graphics.Color
+const val BackgroundPrimary = 0xff15001f
+const val BackgroundSecondary = 0xff1e0d26
+const val BackgroundTertiary = 0xff2a1235
+const val BackgroundAccent = 0xfff9f8f9
+const val BackgroundDanger = 0xff964251
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
-
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+const val ContentPrimary = 0xfff9f8f9
+const val ContentSecondary = 0xffe2dde2
+const val ContentTertiary = 0xffcbc2cb
+const val ContentAccentPrimary = 0xff9900df
+const val ContentAccentSecondary = 0xffcd60ff
+const val ContentDanger = 0xffe84d64
