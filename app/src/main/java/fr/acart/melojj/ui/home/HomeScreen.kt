@@ -1,5 +1,6 @@
 package fr.acart.melojj.ui.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -32,13 +35,19 @@ object HomeScreen : UiScreen<HomeViewModel> {
         ) {
             val uiState by viewModel.uiState.collectAsState()
 
-            when (uiState) {
+            when (val state = uiState) {
                 HomeState.Loading -> Box(contentAlignment = Alignment.Center) {
                     CircularProgressIndicator(color = MeloJJTheme.colors.content.primary)
                 }
 
-                HomeState.Loaded -> {
+                is HomeState.Loaded -> {
                     Column {
+                        Box(
+                            modifier = Modifier
+                                .size(64.dp)
+                                .clip(MeloJJTheme.shapes.shapeCircle)
+                                .background(if (state.isConnectedToSdk) Color.Green else Color.Red)
+                        )
                         Text(text = "Home")
                         Button(
                             onClick = { viewModel.triggerAction(HomeAction.PlayPause) },

@@ -6,5 +6,5 @@ import org.koin.dsl.module
 
 val uiModule = module {
     // Add your UI dependencies here
-    viewModel { HomeViewModel() }
+    viewModel { HomeViewModel(get(), get()) }
 }

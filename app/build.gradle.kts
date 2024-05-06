@@ -19,6 +19,10 @@ android {
             useSupportLibrary = true
         }
 
+        manifestPlaceholders["redirectSchemeName"] = "melojj"
+        manifestPlaceholders["redirectHostName"] = "callback"
+
+
         val spotifyClientId = System.getenv("SPOTIFY_CLIENT_ID")
         val redirectURI = "melojj://callback"
         buildConfigField("String", "SPOTIFY_CLIENT_ID", "\"$spotifyClientId\"")
