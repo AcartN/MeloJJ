@@ -18,25 +18,31 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import fr.acart.melojj.ui.theme.MeloJJTheme
+import org.koin.androidx.compose.KoinAndroidContext
+import org.koin.core.annotation.KoinExperimentalAPI
 
 class MainActivity : ComponentActivity() {
+    @OptIn(KoinExperimentalAPI::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MeloJJTheme {
-                Box(
-                    modifier = Modifier.screenWithStatusBar(),
-                ) {
-                    Greeting("Android")
-                    Icon(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(64.dp),
-                        painter = painterResource(id = R.drawable.music_note),
-                        contentDescription = null,
-                        tint = MeloJJTheme.colors.content.primary
-                    )
+            KoinAndroidContext {
+                MeloJJTheme {
+                    Box(
+                        modifier = Modifier.screenWithStatusBar(),
+                    ) {
+                        Greeting("Android")
+                        Icon(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .size(64.dp),
+                            painter = painterResource(id = R.drawable.music_note),
+                            contentDescription = null,
+                            tint = MeloJJTheme.colors.content.primary
+                        )
+                    }
                 }
+
             }
         }
     }
