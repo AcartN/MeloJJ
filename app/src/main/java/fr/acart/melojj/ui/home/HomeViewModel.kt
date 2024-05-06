@@ -5,13 +5,23 @@ import fr.acart.melojj.ui.base.BaseViewModel
 import fr.acart.melojj.ui.base.UiAction
 import fr.acart.melojj.ui.base.UiEffect
 import fr.acart.melojj.ui.base.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class HomeViewModel : BaseViewModel<HomeState, HomeAction, HomeEffect>() {
 
-    override val uiState: StateFlow<HomeState> = MutableStateFlow(HomeState.Loading)
+    private val mutableUiState = MutableStateFlow<HomeState>(HomeState.Loading)
+    override val uiState = mutableUiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            delay(5.seconds)
+            mutableUiState.value = HomeState.Loaded
+        }
+    }
 
     override suspend fun actionReducer(action: HomeAction) {
         when (action) {
