@@ -22,7 +22,7 @@ class HomeViewModel(
 
     override val uiState = isSdkConnectedUseCase()
         .map { isConnected -> HomeState.Loaded(isConnected) }
-        .onStart { delay(5.seconds) }
+        .onStart { delay(1.seconds) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.Lazily,
