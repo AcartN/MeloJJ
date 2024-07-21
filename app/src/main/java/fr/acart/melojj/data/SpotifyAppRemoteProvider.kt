@@ -31,21 +31,26 @@ class SpotifyAppRemoteProvider(private val application: Application) {
             if (appRemote.isConnected) return appRemote
         }
         return suspendCoroutine { continuation ->
-            SpotifyAppRemote.connect(
-                application,
-                connectionParams,
-                object : Connector.ConnectionListener {
-                    override fun onConnected(appRemote: SpotifyAppRemote) {
-                        spotifyAppRemote = appRemote
-                        continuation.resume(appRemote)
-                    }
+            if (SpotifyAppRemote.isSpotifyInstalled(application)) {
+                SpotifyAppRemote.connect(
+                    application,
+                    connectionParams,
+                    object : Connector.ConnectionListener {
+                        override fun onConnected(appRemote: SpotifyAppRemote) {
+                            spotifyAppRemote = appRemote
+                            continuation.resume(appRemote)
+                        }
 
-                    override fun onFailure(throwable: Throwable) {
-                        spotifyAppRemote = null
-                        continuation.resumeWith(Result.failure(throwable))
+                        override fun onFailure(throwable: Throwable) {
+                            spotifyAppRemote = null
+                            continuation.resumeWith(Result.failure(throwable))
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                spotifyAppRemote = null
+                continuation.resumeWith(Result.failure(SpotifyNotInstalledException()))
+            }
         }.also { mutableConnectionState.value = spotifyAppRemote?.isConnected == true }
     }
 
