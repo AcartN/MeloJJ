@@ -1,17 +1,18 @@
 [versions]
-agp = "8.4.0"
+agp = "8.5.1"
 kotlin = "1.9.23"
 coreKtx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-lifecycleRuntimeKtx = "2.7.0"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+lifecycleRuntimeKtx = "2.8.3"
 activityCompose = "1.9.0"
-composeBom = "2024.05.00"
+composeBom = "2024.06.00"
 koin-bom = "3.5.6"
 navigation-compose = "2.7.7"
 gson = "2.10.1"
 haze = "0.7.1"
+arrow = "1.2.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +36,7 @@ koin-compose = { group = "io.insert-koin", name = "koin-androidx-compose" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation-compose" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
+arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 
 
 [plugins]

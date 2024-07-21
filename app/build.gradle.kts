@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.navigation.compose)
     implementation(libs.haze)
+    implementation(libs.arrow.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
