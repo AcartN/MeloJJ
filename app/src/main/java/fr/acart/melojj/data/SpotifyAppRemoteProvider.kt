@@ -54,4 +54,12 @@ class SpotifyAppRemoteProvider(private val application: Application) {
         }.also { mutableConnectionState.value = spotifyAppRemote?.isConnected == true }
     }
 
+    fun close() {
+        SpotifyAppRemote.disconnect(spotifyAppRemote)
+        spotifyAppRemote = null
+        mutableConnectionState.value = false
+    }
+
+    class SpotifyNotInstalledException : Exception("Spotify is not installed on the device")
+
 }
