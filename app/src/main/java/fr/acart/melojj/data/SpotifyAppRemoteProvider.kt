@@ -7,8 +7,8 @@ import com.spotify.android.appremote.api.SpotifyAppRemote
 import fr.acart.melojj.BuildConfig
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class SpotifyAppRemoteProvider(private val application: Application) {
 
@@ -30,7 +30,7 @@ class SpotifyAppRemoteProvider(private val application: Application) {
         spotifyAppRemote?.let { appRemote ->
             if (appRemote.isConnected) return appRemote
         }
-        return suspendCoroutine { continuation ->
+        return suspendCancellableCoroutine { continuation ->
             if (SpotifyAppRemote.isSpotifyInstalled(application)) {
                 SpotifyAppRemote.connect(
                     application,
@@ -43,7 +43,8 @@ class SpotifyAppRemoteProvider(private val application: Application) {
 
                         override fun onFailure(throwable: Throwable) {
                             spotifyAppRemote = null
-                            continuation.resumeWith(Result.failure(throwable))
+                            if (continuation.isActive)
+                                continuation.resumeWith(Result.failure(throwable))
                         }
                     }
                 )
