@@ -1,26 +1,27 @@
 [versions]
 agp = "8.5.1"
 kotlin = "1.9.23"
-coreKtx = "1.13.1"
+core-ktx = "1.13.1"
 junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.3"
-activityCompose = "1.9.0"
+junit-version = "1.2.1"
+espresso-core = "3.6.1"
+lifecycle-runtime-ktx = "2.8.4"
+activity-compose = "1.9.1"
 composeBom = "2024.06.00"
 koin-bom = "3.5.6"
 navigation-compose = "2.7.7"
 gson = "2.10.1"
 haze = "0.7.1"
 arrow = "1.2.4"
+immutable-collections = "0.3.7"
 
 [libraries]
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit-version" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -37,6 +38,7 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
+immutable-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "immutable-collections" }
 
 
 [plugins]

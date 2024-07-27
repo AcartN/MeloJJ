@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.haze)
     implementation(libs.arrow.core)
+    implementation(libs.immutable.collections)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
