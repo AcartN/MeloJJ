@@ -52,9 +52,12 @@ class SpotifySdkRepository(private val spotifyAppRemoteProvider: SpotifyAppRemot
 
     suspend fun playPause(): Either<Throwable, Unit> = either {
         executeCall {
-            when {
-                playerStatusActualState().bind().isPaused -> playerApi.resume()
-                else -> playerApi.pause()
+            when (val playerStatus = playerStatusActualState().bind()) {
+                PlayerStatus.NoStatus -> playerApi.resume()
+                is PlayerStatus.Active -> when (playerStatus.isPaused) {
+                    true -> playerApi.resume()
+                    false -> playerApi.pause()
+                }
             }
         }
     }
@@ -149,7 +152,7 @@ class SpotifySdkRepository(private val spotifyAppRemoteProvider: SpotifyAppRemot
             imagesApi.getImage(ImageUri(imageUri), imageDimension.toImageDimension())
         }
 
-    private suspend fun List<ListItem>.toContentItems(): List<ContentItem> = mapNotNull { item ->
+    suspend fun List<ListItem>.toContentItems(): List<ContentItem> = mapNotNull { item ->
         when {
             item.playable -> PlayableContentItemImpl(
                 id = item.id,
@@ -226,7 +229,7 @@ class SpotifySdkRepository(private val spotifyAppRemoteProvider: SpotifyAppRemot
 
 }
 
-private fun CrossfadeState.toCrossfade(): Crossfade = when {
+fun CrossfadeState.toCrossfade(): Crossfade = when {
     isEnabled -> Crossfade.On(duration)
     else -> Crossfade.Off
 }
@@ -244,7 +247,7 @@ enum class ImageDimension {
     X_SMALL,
 }
 
-private fun ImageDimension.toImageDimension(): Image.Dimension = when (this) {
+fun ImageDimension.toImageDimension(): Image.Dimension = when (this) {
     ImageDimension.SMALL -> Image.Dimension.SMALL
     ImageDimension.MEDIUM -> Image.Dimension.MEDIUM
     ImageDimension.LARGE -> Image.Dimension.LARGE
@@ -262,7 +265,7 @@ sealed interface PlayableContentItem : ContentItem {
     val subtitle: String
 }
 
-private data class PlayableContentItemImpl(
+data class PlayableContentItemImpl(
     override val id: String,
     override val uri: String,
     override val imageUri: String?,
@@ -290,7 +293,7 @@ private data class ChildrenContentItemImpl(
     val listItem: ListItem,
 ) : ChildrenContentItem
 
-private fun PlayerContext.toPlayingFrom(): PlayingFrom = PlayingFrom(
+fun PlayerContext.toPlayingFrom(): PlayingFrom = PlayingFrom(
     uri = uri,
     title = title,
     subtitle = subtitle,
@@ -316,19 +319,23 @@ enum class ContextType(val value: String) {
     UNKNOWN("unknown"),
 }
 
-data class PlayerStatus(
-    val trackName: String,
-    val artist: Artist,
-    val album: Album,
-    val isPaused: Boolean,
-    // The position in milliseconds
-    val position: Long,
-    // The duration of the track in milliseconds
-    val duration: Long,
-    val repeatMode: RepeatMode,
-    val isShuffling: Boolean,
-    val restrictions: PlaybackRestrictions,
-)
+sealed interface PlayerStatus {
+    data object NoStatus : PlayerStatus
+
+    data class Active(
+        val trackName: String,
+        val artist: Artist,
+        val album: Album,
+        val isPaused: Boolean,
+        // The position in milliseconds
+        val position: Long,
+        // The duration of the track in milliseconds
+        val duration: Long,
+        val repeatMode: RepeatMode,
+        val isShuffling: Boolean,
+        val restrictions: PlaybackRestrictions,
+    ) : PlayerStatus
+}
 
 enum class RepeatMode(val value: Int) {
     OFF(0),
@@ -351,7 +358,7 @@ data class LibraryStatus(
     val canAdd: Boolean,
 )
 
-private fun LibraryState.toLibraryStatus(): LibraryStatus = LibraryStatus(uri, isAdded, canAdd)
+fun LibraryState.toLibraryStatus(): LibraryStatus = LibraryStatus(uri, isAdded, canAdd)
 
 data class Artist(
     val name: String,
@@ -368,10 +375,11 @@ data class Volume(
     val isControllable: Boolean,
 )
 
-private fun VolumeState.toVolume(): Volume = Volume(mVolume, mControllable)
+fun VolumeState.toVolume(): Volume = Volume(mVolume, mControllable)
 
-private fun PlayerState.toPlayerStatus(): PlayerStatus {
-    return PlayerStatus(
+fun PlayerState?.toPlayerStatus() = when (this) {
+    null -> PlayerStatus.NoStatus
+    else -> PlayerStatus.Active(
         trackName = track.name,
         artist = Artist(
             name = track.artist.name,
